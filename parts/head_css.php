@@ -6,8 +6,12 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>040_pages</title>
-    <link rel="stylesheet" href="reset.css">
+    <link rel="stylesheet" href="../parts/reset.css">
+    <link rel="stylesheet" href="./parts/reset.css">
     <style>
+        .nav-item{
+            display: inline-block;
+        }
         .disb{
             display: block;
         }

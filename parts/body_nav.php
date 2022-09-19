@@ -1,20 +1,33 @@
 <div class="nav">
-    <div>購物車</div>
+    
 
-    <div id="cartcount">0</div>
+    <ul>
+        <li class="nav-item">
+            <a href="/mfee29-php/smallwork/index_.php">
+                首頁
+            </a>
+        </li>
+        <li class="nav-item">
+            <a href="/mfee29-php/smallwork/store/Store_index.php">
+                店家
+            </a>
+        </li>
+        <li class="nav-item">
+            <a href="/mfee29-php/smallwork/chat/Chat_index.php">
+                論壇
+            </a>
+        </li>
+        <li class="nav-item">
+            <a href="">
 
-
-
-    <button><a href="index.php">首頁</a></button>
-
-    <button id="goCart" ><a href="cartPage.php">購物車</a></button>
-
-    <button id="goOrder" ><a href="Order.php">訂單</a></button> 
+            </a>
+        </li>
+    </ul>
 
 
     <?php if (empty($_SESSION['user'])) : ?>
         <!-- 轉到login_system資料夾中的login.php -->
-        <div class="LOGIN"><a href="./login_system/login.php">登入</a></div>  
+        <div class="LOGIN"><a href="../login_system/login.php">登入</a></div>  
 
         <div class="LOGOUT"><a class="nav-link" href="#">註冊</a></div>
 
@@ -32,7 +45,7 @@
 
 </div>
 
-<script>
+<!-- <script>
     let cartCountBoxNav = document.querySelector("#cartcount");
 
     function a() {
@@ -62,4 +75,4 @@
     })
 
 
-</script>
+</script> -->
