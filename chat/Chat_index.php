@@ -1,42 +1,80 @@
 <?php require '../parts/conect_db.php';
-    $pagePer = 5;  //
-    $page = 3;
-    $totalPages = 10;
+    $perPage = 5;  //每頁標題數
 
-    $a_sql = "SELECT * FROM `chat` JOIN member on `chat`.`author`=`member`.`sid`";  //合併chat跟member表單
-    $li_sql = "SELECT COUNT(`sid_title`) FROM `chat`";  //列表發表總數
     $a_sql = "SELECT * FROM `chat` JOIN member on `chat`.`author`=`member`.`sid`";
+
+    $page = isset($_GET['page']) ? intval($_GET['page']) : 1;
+    // 算總筆數 
+    $li_sql = "SELECT COUNT(`sid_title`) FROM `chat`";  //列表發表總數 **
+    $totalRows = $pdo->query($li_sql)->fetch(PDO::FETCH_NUM)[0];
+
+    $totalPages = ceil($totalRows / $perPage);
+
+    // $rows = [];
+    // // 如果有資料
+    // if ($totalRows) {
+    //     if ($page < 1) {
+    //         header('Location: ?page=1');
+    //         exit;
+    //     }
+    //     if ($page > $totalPages) {
+    //         header('Location: ?page=' . $totalPages);
+            
+    //         exit;
+    //     }
+
+    //     $sql = sprintf(
+    //         "SELECT * FROM address_book ORDER BY sid DESC LIMIT %s, %s",
+    //         ($page - 1) * $perPage,
+    //         $perPage
+    //     );
+    //     $rows = $pdo->query($sql)->fetchAll();
+    // }
+    // $output = [
+    //     'totalRows' => $totalRows,
+    //     'totalPages' => $totalPages,
+    //     'page' => $page,
+    //     'rows' => $rows,
+    //     'perPage' => $perPage,
+    // ];
     
 ?>
 <?php require '../parts/head_css.php' ?>
 <?php require '../parts/body_nav.php' ?>
 <div class="container">
     <div class="row">
-        <nav aria-label="Page navigation example">
-            <ul class="pagination">
-                <li class="page-item"><a class="page-link" href="#">Previous</a></li>
-                <?php for($i=$page-5;$i<= $page + 5; $i++):
-                    if($i>=1 and $i <= $totalPages):
-                ?>
-                    <li class="page-item">
-                        <a class="page-link" href="page=<?=$i?>">
-                            <?=$i?>
+        <div class="col">
+            <nav aria-label="Page navigation example">
+                <ul class="pagination">
+                    <li class="page-item <?= 1 == $page ? 'disabled' : '' ?>">
+                        <a class="page-link" href="?page=<?= $page - 1 ?>">
+                            &laquo;
                         </a>
                     </li>
-                <?php endif;
-                    endfor;
-                ?>
-                <li class="page-item"><a class="page-link" href="#">Next</a></li>
-            </ul>
-        </nav>
+                    <?php for ($i = $page - 5; $i <= $page + 5; $i++) :
+                        if ($i >= 1 and $i <= $totalPages) :
+                    ?>
+                            <li class="page-item <?= $i == $page ? 'active' : '' ?>">
+                                <a class="page-link" href="?page=<?= $i ?>"><?= $i ?></a>
+                            </li>
+                    <?php
+                        endif;
+                    endfor; ?>
+                    <li class="page-item <?= $totalPages == $page ? 'disabled' : '' ?>">
+                        <a class="page-link" href="?page=<?= $page + 1 ?>">
+                            &raquo;
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
     </div>
-    <?php
-    //知道無法執行
-        if(empty($_SESSION['admin'])){
-            include '/chat_no_login.php';
-        }else{
-            include '/chat_no_login.php';
-        }
+    <?php 
+        if(empty($_SESSION['user'])){
+            include './chat_no_table.php';
+        } else {
+            include './chat_table.php';
+        }   
     ?>
 </div>
 <?php require '../parts/footer.php' ?>

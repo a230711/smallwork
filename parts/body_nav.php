@@ -36,7 +36,7 @@
         <div class="LOGIN"><?= $_SESSION['user']['nickname'] ?></a></div>
 
 
-        <div class="LOGOUT"><a class="nav-link" href="./login_system/logout.php">登出</a></div>
+        <div class="LOGOUT"><a class="nav-link" href="../login_system/logout.php">登出</a></div>
 
     <?php endif; ?>
 
