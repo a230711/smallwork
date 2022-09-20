@@ -10,26 +10,29 @@
 
     $totalPages = ceil($totalRows / $perPage);
 
-    // $rows = [];
-    // // 如果有資料
-    // if ($totalRows) {
-    //     if ($page < 1) {
-    //         header('Location: ?page=1');
-    //         exit;
-    //     }
-    //     if ($page > $totalPages) {
-    //         header('Location: ?page=' . $totalPages);
+    $rows = [];
+    // 如果有資料
+    if ($totalRows) {
+        if ($page < 1) {
+            header('Location: ?page=1');
+            exit;
+        }
+        if ($page > $totalPages) {
+            header('Location: ?page=' . $totalPages);
             
-    //         exit;
-    //     }
+            exit;
+        }
+    // "SELECT * FROM chat ORDER BY sid DESC LIMIT %s, %s"
+    // SELECT `title`,`content`,`time`,`member`.`name` FROM `chat` JOIN member on `chat`.`author`=`member`.`sid` WHERE `sid_title`=1
+    // SELECT `title`,`content`,`time`,`member`.`name` FROM `chat` JOIN member on `chat`.`author`=`member`.`sid` WHERE `sid_title`=1 ORDER BY time DESC LIMIT 0, 5
+        $sql = sprintf(   
+            "SELECT `chat`,`title`,`author`,`content`,`time`,`member`.`name` FROM `chat` JOIN member on `chat`.`author`=`member`.`sid` WHERE `sid_title`=1 ORDER BY time DESC LIMIT %s, %s",
+            ($page - 1) * $perPage,
+            $perPage
+        );  //資料只取5筆
 
-    //     $sql = sprintf(
-    //         "SELECT * FROM address_book ORDER BY sid DESC LIMIT %s, %s",
-    //         ($page - 1) * $perPage,
-    //         $perPage
-    //     );
-    //     $rows = $pdo->query($sql)->fetchAll();
-    // }
+        $rows = $pdo->query($sql)->fetchAll();
+    }
     // $output = [
     //     'totalRows' => $totalRows,
     //     'totalPages' => $totalPages,
@@ -77,4 +80,13 @@
         }   
     ?>
 </div>
+<script>
+    const table = document.querySelector('table');
+    function delete_it(chat){
+        if(confirm(`確定要刪除編號為 ${chat} 的資料嗎?`)){
+            location.href = `./chat_delete.php?chat=${chat}`;
+        }
+    }
+
+</script>
 <?php require '../parts/footer.php' ?>

@@ -7,7 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>040_pages</title>
     <link rel="stylesheet" href="../parts/reset.css">
-    <link rel="stylesheet" href="./parts/reset.css">
+    <!-- <link rel="stylesheet" href="./parts/reset.css">  之後再處理 -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-F3w7mX95PdgyTmZZMECAngseQB83DfGTowi0iMjiWaeVhAn4FJkqJByhZMI3AhiU" crossorigin="anonymous">
     <style>
         .nav-item{
