@@ -1,66 +1,89 @@
 <?php require './Buy-api.php' ?>
-<div>
-    
-    <ul>
-        <?php foreach ($rows as $r) : ?>
-        <li>
-            <h2><?= htmlentities($r['title']) ?></h2>
-            <p><?= htmlentities($r['content']) ?></p>
-            <h3><?= $r['time'] ?></h3>
-            <p><?= $r['name'] ?></p>
-            <p>
-                <a class="btn btn-primary" data-bs-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">
-                回覆
-                </a>
-            </p>
-            <div class="collapse" id="collapseExample">
-                <div class="card card-body">
-                    <input type="text">
-                    <button>確定</button>
-                </div>
-            </div>
-        </li>
-        <?php endforeach; ?>
-    </ul>
-    
-</div>
+<?php 
+    $ta_sql = "SELECT `chat`,`content`,`member`.`name`,`time`,`reply_sid` FROM `chat` JOIN `member` on `chat`.`author`=`member`.`sid` WHERE `reply_sid` ORDER BY `time` DESC";
+    $rows2 = [];
+
+    $rows2 = $pdo->query($ta_sql)->fetchAll();
+
+    // echo json_encode($rows2, JSON_UNESCAPED_UNICODE);
+?>
+
 <div class="row">
     <div class="col">
-        <table class="table table-striped table-bordered">
-            <thead>
-                <tr>
-                    <th scope="col">
-                        刪除
-                    </th>
-                    <th scope="col">標題</th>
-                    <th scope="col">內容</th>
-                    <th scope="col">發文時間</th>
-                    <th scope="col">作者</th>
-                    <th scope="col">回覆</th>
-                </tr>
-            </thead>
-            <tbody>
-                <?php foreach ($rows as $r) : ?>
-                    <tr>
-                        <td>
-                            <a href="javascript: delete_it(<?= $r['chat'] ?>)">
-                                刪除
-                            </a>
-                        </td>
-                        <td><?= htmlentities($r['title']) ?></td>
-                        <td><?= htmlentities($r['content']) ?></td>
-                        <td><?= $r['time'] ?></td>
-                        <td><?= $r['name'] ?></td>
-                        <td>
-                            <a href="?author=<?= $r['author'] ?>">
-                                回覆
-                            </a>
-                            <!-- 想用在同一層做新增暫時等一下，還要處理按下轉跳問題 -->
-                        </td>
-                    </tr>
-                <?php endforeach; ?>
-            </tbody>
-
-        </table>
+    <?php foreach ($rows as $r) : ?>
+        <div class="accordion" id="accordionExample">
+            
+            <div class="accordion-item">                     
+                <h2 class="accordion-header" id="heading<?=$r['chat']?>"> 
+                    <!-- 原本的?page=1怎麼被取代 -->               
+                    <button class="accordion-button" type="button" data-bs-toggle='collapse' data-bs-target="#collapse<?=$r['chat']?>" aria-expanded="true" aria-controls="collapse<?=$r['chat']?>">
+                        <?= htmlentities($r['title']) ?>
+                    </button>               
+                </h2>               
+                <div id="collapse<?=$r['chat']?>" class="accordion-collapse collapse" aria-labelledby="heading<?=$r['chat']?>" data-bs-parent="#accordionExample">
+                    <div class="accordion-body">
+                        <?= htmlentities($r['content']) ?>
+                        <br>
+                        <?= $r['name'] ?><?= $r['time'] ?>
+                        <br>
+                        <form name="form1" class="row g-3" id="form1">
+                            <div class="col-sm-10">
+                                <textarea name="content" class="form-control talk" placeholder="留言" id="floatingTextarea content"></textarea>
+                                <input name="author" id="author" type="text">
+                                <input name="reply_sid" id="reply_sid" type="text">
+                            </div>
+                            <div class="col-sm">
+                                <button onclick='checkForm(); return false;' class="btn btn-primary">確認</button>
+                                <a href="javascript: delete_it(<?= $r['chat'] ?>)" class="btn btn-primary">刪除</a>
+                            </div>
+                            
+                        </form>
+                        <?php foreach ($rows2 as $ch) : 
+                            if($r['chat']==$ch['reply_sid']):
+                        ?>
+                            <div class="alert alert-info" role="alert">
+                                <?= $ch['content'] ?>
+                                <?= $ch['name'] ?>
+                                <?= $ch['time'] ?>
+                            </div>
+                        <?php endif;
+                            endforeach; 
+                        ?>
+                    </div>
+                </div>
+            </div>
+        </div>
+    <?php endforeach; ?>
     </div>
 </div>
+<script>
+    const talk = document.querySelectorAll('.talk');
+    
+    function checkForm(){
+        // document.form1.email.value
+        let FM = document.querySelector('#form1');
+        const fd = new FormData(FM);
+
+        // for(let k of fd.keys()){
+        //     console.log(`${k}: ${fd.get(k)}`);
+        // }
+        // TODO: 檢查欄位資料
+
+        fetch('insert-api.php', {
+            method: 'POST',
+            body: fd
+        })
+        .then(r=>r.json())
+        .then(obj=>{
+            console.log(obj);
+            if(! obj.success){
+                alert(obj.error);
+            } else {
+                alert('謝謝留言')
+                // location.href = 'list.php';
+            }
+        })
+
+
+    }
+</script>

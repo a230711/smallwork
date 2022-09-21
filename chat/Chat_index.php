@@ -32,6 +32,7 @@
         );  //資料只取5筆
 
         $rows = $pdo->query($sql)->fetchAll();
+        // echo json_encode($rows, JSON_UNESCAPED_UNICODE);
     }
     // $output = [
     //     'totalRows' => $totalRows,
