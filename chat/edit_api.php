@@ -25,7 +25,7 @@ $sql = "UPDATE `chat` SET
 `title`=?,
 `content`=?,
 `chang_time`=NOW()
-WHERE chat=?";
+WHERE `chat`=?";
 
 $stmt = $pdo->prepare($sql);
 

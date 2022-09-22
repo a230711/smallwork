@@ -73,7 +73,7 @@
                 // }
                 // TODO: 檢查欄位資料
 
-                fetch('insert-api.php', {
+                fetch('reply-api.php', {
                     method: 'POST',
                     body: fd
                 })

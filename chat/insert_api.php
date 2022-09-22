@@ -22,8 +22,8 @@ if(empty($_POST['content'])){
 // TODO: 檢查欄位資料
 
 $sql = "INSERT INTO `chat`(
-    `author`, `time`, `content`, `reply_sid`
-    ) VALUES (?, NOW(), ?, ?)";
+    `author`, `time`, `content`, `title`, `sid_title`
+    ) VALUES (?, NOW(), ?, ?, ?)";
 
 $stmt = $pdo->prepare($sql);
 
@@ -37,7 +37,8 @@ try {
     $stmt->execute([
         $_POST['author'],
         $_POST['content'],
-        $_POST['reply_sid'],
+        $_POST['sid_title'],
+        $_POST['title'],
     ]);
 } catch(PDOException $ex) {
     $output['error'] = $ex->getMessage();

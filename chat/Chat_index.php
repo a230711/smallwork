@@ -73,6 +73,10 @@
             </nav>
         </div>
     </div>
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+        發文
+    </button>
+    <?php require './insert.php' ?>
     <?php 
         if(empty($_SESSION['user'])){
             include './chat_no_table.php';
