@@ -17,7 +17,7 @@
                 <h2 class="accordion-header" id="heading<?=$r['chat']?>"> 
                     <!-- 原本的?page=1怎麼被取代 -->               
                     <button class="accordion-button" type="button" data-bs-toggle='collapse' data-bs-target="#collapse<?=$r['chat']?>" aria-expanded="true" aria-controls="collapse<?=$r['chat']?>">
-                        <?= htmlentities($r['title']) ?>
+                        <?= $r['name'] ?><?=$r['chat']?><?= htmlentities($r['title']) ?>
                     </button>               
                 </h2>               
                 <div id="collapse<?=$r['chat']?>" class="accordion-collapse collapse" aria-labelledby="heading<?=$r['chat']?>" data-bs-parent="#accordionExample">
@@ -26,17 +26,16 @@
                         <br>
                         <?= $r['name'] ?><?= $r['time'] ?>
                         <br>
-                        <form name="form1" class="row g-3" id="form1">
+                        <form name="form1" class="row g-3" id="form<?=$r['chat']?>">
                             <div class="col-sm-10">
                                 <textarea name="content" class="form-control talk" placeholder="留言" id="floatingTextarea content"></textarea>
-                                <input name="author" id="author" type="text">
-                                <input name="reply_sid" id="reply_sid" type="text">
+                                <input type="radio" name="reply_sid" id="reply_sid" value="<?=$r['chat']?>" checked/>回覆:<?= $r['name'] ?>
+                                <input type="radio" name="author" id="author" value="<?= $_SESSION['user']['sid'] ?>" checked/>作者:<?= $_SESSION['user']['nickname'] ?>
                             </div>
                             <div class="col-sm">
-                                <button onclick='checkForm(); return false;' class="btn btn-primary">確認</button>
+                                <button onclick="checkForm(<?=$r['chat']?>)"; return false;' class="btn btn-primary">確認</button>
                                 <a href="javascript: delete_it(<?= $r['chat'] ?>)" class="btn btn-primary">刪除</a>
                             </div>
-                            
                         </form>
                         <?php foreach ($rows2 as $ch) : 
                             if($r['chat']==$ch['reply_sid']):
@@ -53,37 +52,36 @@
                 </div>
             </div>
         </div>
+        <script>
+
+            
+            function checkForm(sid){
+                // document.form1.email.value
+                let FM = document.querySelector(`#form${sid}`);
+                const fd = new FormData(FM);
+
+                // for(let k of fd.keys()){
+                //     console.log(`${k}: ${fd.get(k)}`);
+                // }
+                // TODO: 檢查欄位資料
+
+                fetch('insert-api.php', {
+                    method: 'POST',
+                    body: fd
+                })
+                .then(r=>r.json())
+                .then(obj=>{
+                    console.log(obj);
+                    if(! obj.success){
+                        alert(obj.error);
+                    } else {
+                        alert('謝謝留言')
+                        // location.href = 'list.php';
+                    }
+                })
+            }
+        </script>
+
     <?php endforeach; ?>
     </div>
 </div>
-<script>
-    const talk = document.querySelectorAll('.talk');
-    
-    function checkForm(){
-        // document.form1.email.value
-        let FM = document.querySelector('#form1');
-        const fd = new FormData(FM);
-
-        // for(let k of fd.keys()){
-        //     console.log(`${k}: ${fd.get(k)}`);
-        // }
-        // TODO: 檢查欄位資料
-
-        fetch('insert-api.php', {
-            method: 'POST',
-            body: fd
-        })
-        .then(r=>r.json())
-        .then(obj=>{
-            console.log(obj);
-            if(! obj.success){
-                alert(obj.error);
-            } else {
-                alert('謝謝留言')
-                // location.href = 'list.php';
-            }
-        })
-
-
-    }
-</script>
