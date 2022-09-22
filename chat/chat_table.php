@@ -1,12 +1,4 @@
 <?php require './Buy-api.php' ?>
-<?php 
-    $ta_sql = "SELECT `chat`,`content`,`member`.`name`,`time`,`reply_sid` FROM `chat` JOIN `member` on `chat`.`author`=`member`.`sid` WHERE `reply_sid` ORDER BY `time` DESC";
-    $rows2 = [];
-
-    $rows2 = $pdo->query($ta_sql)->fetchAll();
-
-    // echo json_encode($rows2, JSON_UNESCAPED_UNICODE);
-?>
 
 <div class="row">
     <div class="col">
@@ -33,17 +25,22 @@
                                 <input type="radio" name="author" id="author" value="<?= $_SESSION['user']['sid'] ?>" checked/>作者:<?= $_SESSION['user']['nickname'] ?>
                             </div>
                             <div class="col-sm">
-                                <button onclick="checkForm(<?=$r['chat']?>)"; return false;' class="btn btn-primary">確認</button>
-                                <a href="javascript: delete_it(<?= $r['chat'] ?>)" class="btn btn-primary">刪除</a>
+                                <button onclick="checkForm(<?=$r['chat']?>); return false;" class="btn btn-primary">確認</button>
+                                <a href="javascript: delete_it(<?= $r['chat'] ?>,1)" class="btn btn-primary <?= $_SESSION['user']['nickname']==$r['name']?'':'disabled'  ?> ">刪除</a>
                             </div>
                         </form>
                         <?php foreach ($rows2 as $ch) : 
                             if($r['chat']==$ch['reply_sid']):
                         ?>
                             <div class="alert alert-info" role="alert">
-                                <?= $ch['content'] ?>
+                                <div class="content">
+                                    <?= $ch['content'] ?>
+                                </div>
+                                
                                 <?= $ch['name'] ?>
-                                <?= $ch['time'] ?>
+                                <?= $ch['time'] ?> 
+                                <a href="javascript: edit_it()" class="btn btn-primary <?= $_SESSION['user']['nickname']==$ch['name']?'':'disabled'  ?> ">編輯</a>                   
+                                <a href="javascript: delete_it(<?= $ch['chat'] ?>,0)" class="btn btn-primary <?= $_SESSION['user']['nickname']==$ch['name']?'':'disabled'  ?> ">刪除</a>
                             </div>
                         <?php endif;
                             endforeach; 
@@ -53,7 +50,10 @@
             </div>
         </div>
         <script>
-
+            function edit_it(){
+                const content = document.querySelector('.content');
+                content.innerHTML = `<input type="text">`;
+            }
             
             function checkForm(sid){
                 // document.form1.email.value
@@ -79,6 +79,13 @@
                         // location.href = 'list.php';
                     }
                 })
+            }
+
+            function delete_it(name,torc){
+                const test = !torc?'留言':'標題'
+                if(confirm(`確定要刪除${test}嗎?`)){
+                    location.href = `./chat_delete_api.php?author=${name}`;
+                }
             }
         </script>
 

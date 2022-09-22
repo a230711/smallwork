@@ -83,11 +83,6 @@
 </div>
 <script>
     const table = document.querySelector('table');
-    function delete_it(chat){
-        if(confirm(`確定要刪除編號為 ${chat} 的資料嗎?`)){
-            location.href = `./chat_delete.php?chat=${chat}`;
-        }
-    }
 
 </script>
 <?php require '../parts/footer.php' ?>
