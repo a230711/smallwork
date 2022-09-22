@@ -10,7 +10,7 @@
                     <!-- 原本的?page=1怎麼被取代 -->               
                     <button class="accordion-button" type="button" data-bs-toggle='collapse' data-bs-target="#collapse<?=$r['chat']?>" aria-expanded="true" aria-controls="collapse<?=$r['chat']?>">
                         <?= $r['name'] ?><?=$r['chat']?><?= htmlentities($r['title']) ?>
-                    </button>               
+                    </button>              
                 </h2>               
                 <div id="collapse<?=$r['chat']?>" class="accordion-collapse collapse" aria-labelledby="heading<?=$r['chat']?>" data-bs-parent="#accordionExample">
                     <div class="accordion-body">
@@ -18,6 +18,11 @@
                         <br>
                         <?= $r['name'] ?><?= $r['time'] ?>
                         <br>
+                        <button type="button" class="btn btn-primary <?= $_SESSION['user']['nickname']==$r['name']?'':'disabled'  ?>" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                        編輯
+                        </button>
+                        
+                        <a href="javascript: delete_it(<?= $r['chat'] ?>,1)" class="btn btn-primary <?= $_SESSION['user']['nickname']==$r['name']?'':'disabled'  ?> ">刪除</a>
                         <form name="form1" class="row g-3" id="form<?=$r['chat']?>">
                             <div class="col-sm-10">
                                 <textarea name="content" class="form-control talk" placeholder="留言" id="floatingTextarea content"></textarea>
@@ -26,22 +31,28 @@
                             </div>
                             <div class="col-sm">
                                 <button onclick="checkForm(<?=$r['chat']?>); return false;" class="btn btn-primary">確認</button>
-                                <a href="javascript: delete_it(<?= $r['chat'] ?>,1)" class="btn btn-primary <?= $_SESSION['user']['nickname']==$r['name']?'':'disabled'  ?> ">刪除</a>
                             </div>
                         </form>
                         <?php foreach ($rows2 as $ch) : 
                             if($r['chat']==$ch['reply_sid']):
                         ?>
-                            <div class="alert alert-info" role="alert">
-                                <div class="content">
-                                    <?= $ch['content'] ?>
+                            <div class="container">
+                                <div class="row alert alert-info" role="alert">
+                                    <div class="col-7">
+                                        <?= $ch['content'] ?>
+                                    </div>
+                                    <div class="col">
+                                        <?= $ch['name'] ?>
+                                    </div>
+                                    <div class="col">
+                                        <?= $ch['time'] ?> 
+                                    </div>
+                                    <div class="col">
+                                        <a href="javascript: delete_it(<?= $ch['chat'] ?>,0)" class="btn btn-primary <?= $_SESSION['user']['nickname']==$ch['name']?'':'disabled'  ?> ">刪除</a>
+                                    </div>
                                 </div>
-                                
-                                <?= $ch['name'] ?>
-                                <?= $ch['time'] ?> 
-                                <a href="javascript: edit_it()" class="btn btn-primary <?= $_SESSION['user']['nickname']==$ch['name']?'':'disabled'  ?> ">編輯</a>                   
-                                <a href="javascript: delete_it(<?= $ch['chat'] ?>,0)" class="btn btn-primary <?= $_SESSION['user']['nickname']==$ch['name']?'':'disabled'  ?> ">刪除</a>
                             </div>
+                            
                         <?php endif;
                             endforeach; 
                         ?>
@@ -49,12 +60,9 @@
                 </div>
             </div>
         </div>
+        
+        <?php require './edit.php' ?>
         <script>
-            function edit_it(){
-                const content = document.querySelector('.content');
-                content.innerHTML = `<input type="text">`;
-            }
-            
             function checkForm(sid){
                 // document.form1.email.value
                 let FM = document.querySelector(`#form${sid}`);
@@ -77,6 +85,7 @@
                     } else {
                         alert('謝謝留言')
                         // location.href = 'list.php';
+                        location.reload();
                     }
                 })
             }
