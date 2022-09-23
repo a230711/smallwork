@@ -1,7 +1,7 @@
 <?php 
 // require __DIR__ . '/parts/admin-required.php';
 session_start();
-require '../parts/connect_db.php';
+require '../parts/conect_db.php';
 
 header('Content-Type: application/json');
 
@@ -39,7 +39,7 @@ try {
     $stmt->execute([
         $_POST['title'],
         $_POST['content'],
-        $_POST['chat'],
+        $_POST['chat']
     ]);
 } catch(PDOException $ex) {
     $output['error'] = $ex->getMessage();

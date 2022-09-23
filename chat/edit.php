@@ -1,6 +1,6 @@
 <div class="modal fade" id="exampleModal1" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
-        <form name="form1" id="form1<?=$r['chat']?>" onsubmit="editForm(); return false;" class="modal-content">
+        <form name="form1" id="form1<?=$r['chat']?>" class="modal-content">
             <div class="modal-header">
                 <h5 class="modal-title" id="exampleModalLabel">修改標題內文</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -29,6 +29,7 @@
         // document.form1.email.value
 
         let FM = document.querySelector(`#form1${sid}`);
+        console.log(FM);
         const fd = new FormData(FM);
         // for(let k of fd.keys()){
         //     console.log(`${k}: ${fd.get(k)}`);
@@ -45,7 +46,7 @@
                 alert(obj.error);
             } else {
                 alert('修改成功')
-                // location.href = 'list.php';
+                location.href = 'Chat_index.php';
             }
         })
 

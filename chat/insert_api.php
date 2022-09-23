@@ -37,8 +37,8 @@ try {
     $stmt->execute([
         $_POST['author'],
         $_POST['content'],
-        $_POST['sid_title'],
         $_POST['title'],
+        $_POST['sid_title'],
     ]);
 } catch(PDOException $ex) {
     $output['error'] = $ex->getMessage();
