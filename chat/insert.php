@@ -2,14 +2,18 @@
   <div class="modal-dialog">
     <form name="formc" class="modal-content">
         <div class="modal-header">
-            <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
+            <h5 class="modal-title" id="exampleModalLabel">新增標題內文</h5>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body">
             <input type="hidden" name="author" value="<?= $_SESSION['user']['sid'] ?>">
             <input type="hidden" name="sid_title" value="1">
-            <input type="text" name="title">
-            <textarea name="content"></textarea>
+        
+            <h5 class="card-title">標題文字</h5>
+                <input type="text" name="title" class="form-control me-auto">
+            <h5 class="card-title">標題內容</h5>
+                <textarea name="content" class="form-control me-auto"></textarea>
+
         </div>
         <div class="modal-footer">
             <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">取消</button>

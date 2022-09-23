@@ -12,7 +12,7 @@ $output = [
     'postData' => $_POST, // 除錯用的
 ];
 
-if(empty($_POST['name'])){
+if(empty($_POST['chat'])){
     $output['error'] = '參數不足';
     $output['code'] = 400;
     echo json_encode($output, JSON_UNESCAPED_UNICODE); 
@@ -40,7 +40,6 @@ try {
         $_POST['title'],
         $_POST['content'],
         $_POST['chat'],
-        $_POST['chang_time']
     ]);
 } catch(PDOException $ex) {
     $output['error'] = $ex->getMessage();

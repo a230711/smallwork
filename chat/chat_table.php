@@ -9,7 +9,7 @@
                 <h2 class="accordion-header" id="heading<?=$r['chat']?>"> 
                     <!-- 原本的?page=1怎麼被取代 -->               
                     <button class="accordion-button" type="button" data-bs-toggle='collapse' data-bs-target="#collapse<?=$r['chat']?>" aria-expanded="true" aria-controls="collapse<?=$r['chat']?>">
-                        <?= $r['name'] ?><?=$r['chat']?><?= htmlentities($r['title']) ?>
+                        <?= htmlentities($r['title']) ?>
                     </button>              
                 </h2>               
                 <div id="collapse<?=$r['chat']?>" class="accordion-collapse collapse" aria-labelledby="heading<?=$r['chat']?>" data-bs-parent="#accordionExample">
@@ -18,21 +18,28 @@
                         <br>
                         <?= $r['name'] ?><?= $r['time'] ?>
                         <br>
-                        <button type="button" class="btn btn-primary <?= $_SESSION['user']['nickname']==$r['name']?'':'disabled'  ?>" data-bs-toggle="modal" data-bs-target="#exampleModal">
+                        <button type="button" class="btn btn-primary <?= $_SESSION['user']['nickname']==$r['name']?'':'disabled'  ?>" data-bs-toggle="modal" data-bs-target="#exampleModal1">
                         編輯
                         </button>
                         
                         <a href="javascript: delete_it(<?= $r['chat'] ?>,1)" class="btn btn-primary <?= $_SESSION['user']['nickname']==$r['name']?'':'disabled'  ?> ">刪除</a>
-                        <form name="form1" class="row g-3" id="form<?=$r['chat']?>">
-                            <div class="col-sm-10">
-                                <textarea name="content" class="form-control talk" placeholder="留言" id="floatingTextarea content"></textarea>
-                                <input type="radio" name="reply_sid" id="reply_sid" value="<?=$r['chat']?>" checked/>回覆:<?= $r['name'] ?>
-                                <input type="radio" name="author" id="author" value="<?= $_SESSION['user']['sid'] ?>" checked/>作者:<?= $_SESSION['user']['nickname'] ?>
+                        <div class="container">
+                            <div class="row">
+                                <div class="col">
+                                    <form name="form1" class="row g-3" id="form<?=$r['chat']?>">
+                                        <div class="hstack gap-3">
+                                            <textarea name="content" class="form-control me-auto" placeholder="留言" rows="1"></textarea>
+                                            <button type="button" onclick="checkForm(<?=$r['chat']?>); return false;" class="btn btn-secondary">Enter</button>
+                                            <div class="vr"></div>
+                                            <button type="reset" class="btn btn-outline-danger">Reset</button>
+                                            
+                                            <input type="hidden" name="reply_sid" id="reply_sid" value="<?=$r['chat']?>" checked/>
+                                            <input type="hidden" name="author" id="author" value="<?= $_SESSION['user']['sid'] ?>" checked/>
+                                        </div>
+                                    </form>
+                                </div>
                             </div>
-                            <div class="col-sm">
-                                <button onclick="checkForm(<?=$r['chat']?>); return false;" class="btn btn-primary">確認</button>
-                            </div>
-                        </form>
+                        </div>
                         <?php foreach ($rows2 as $ch) : 
                             if($r['chat']==$ch['reply_sid']):
                         ?>
